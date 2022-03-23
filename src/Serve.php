@@ -1,10 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestinterface;
 use Laminas\Diactoros\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class Serve
 {
@@ -12,6 +14,7 @@ class Serve
     {
         $response = new Response();
         $response->getBody()->write('Hello World!');
+
         return $response->withStatus(200);
     }
 }
