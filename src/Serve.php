@@ -33,12 +33,6 @@ class Serve
             if ($majorVersion !== 0 && $minorVersion !== 1) {
                 return $this->sendError('Cannot satisfy requested KyuWeb version', 406);
             }
-
-            // We can only satisfy GET requests for now; also allow for HEAD.
-            $method = $request->getMethod();
-            if ($method !== 'GET' && $method !== 'HEAD') {
-                return $this->sendError('Only GET requests accepted.', 405);
-            }
         }
 
         // Can we handle the Accept header?
