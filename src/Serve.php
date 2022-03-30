@@ -14,7 +14,7 @@ class Serve
 {
     private bool $isKwReq;
 
-    public function __invoke(ServerRequestInterface $request): ResponseInterface
+    public function __invoke(ServerRequestInterface $request, array $args): ResponseInterface
     {
         // Check if this is a KyuWeb request
         $kwVersStr     = $request->getHeaderLine('Accept-KyuWeb');
@@ -44,8 +44,20 @@ class Serve
             return $this->sendError('Cannot return a document in the requested type(s).', 415);
         }
 
+        // Prefix path with a / because it makes the below easier.
+        $path = '/' . $args['path'];
+
+        // Don't allow for the string "/." in the path. This should stop
+        // people trying to access invisible files/directories. It could
+        // theoretically also stop people from navigating out of the doc
+        // directory, but it looks like something is already doing that (maybe
+        // the router, maybe the PSR request… some day I will look into it but
+        // not today).
+        if (\strpos($path, '/.') !== false) {
+            return $this->sendError('Potentially malicious path in request.', 400);
+        }
+
         // Okay, so far so good. Try to find the file.
-        $path    = $request->getRequestTarget();
         $docPath = \dirname(\dirname(__FILE__)) . '/doc' . $path;
         // Remove a trailing slash if present.
         $docPath = \rtrim($docPath, '/');

@@ -18,7 +18,7 @@ $container->add(Serve::class);
 $strategy = (new Route\Strategy\ApplicationStrategy())->setContainer($container);
 $router   = (new Route\Router())->setStrategy($strategy);
 
-$router->get('/{path:.+}', Serve::class);
+$router->get('/{path:.*}', Serve::class);
 
 $response = $router->dispatch($request);
 
