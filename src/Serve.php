@@ -14,6 +14,9 @@ class Serve
 {
     private bool $isKwReq;
 
+    /**
+     * @param string[] $args
+     */
     public function __invoke(ServerRequestInterface $request, array $args): ResponseInterface
     {
         // Check if this is a KyuWeb request
@@ -114,7 +117,7 @@ END;
     {
         $headers  = [
             'KyuWeb' => '0.1',
-            'Content-Type' => $this->isKwReq ? 'text/markdown' : 'text/html'
+            'Content-Type' => $this->isKwReq ? 'text/markdown' : 'text/html',
         ];
         $response = new Response('php://memory', $httpErrCode, $headers);
 
