@@ -22,5 +22,10 @@
     },
     "require-dev": {
         "unleashedtech/php-coding-standard": "^3.1"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     }
 }

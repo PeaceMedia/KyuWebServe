@@ -87,7 +87,7 @@ class Serve
 <!doctype html>
 <html>
     <head>
-        <title>kyuWeb Document</title>
+        <title>KyuWeb Document</title>
     </head>
     <body>
 <!-- KyuWeb Doc Start /--><pre>
@@ -99,15 +99,19 @@ class Serve
 END;
                 $stream    = $sf->createStream($content);
             }
-
-            return new Response($stream, 200, $headers);
         }
+
+        return new Response($stream, 200, $headers);
     }
 
     protected function sendError(string $message, int $httpErrCode = 500): ResponseInterface
     {
-        $response = new Response();
-        $response->setStatus($httpErrCode);
+        $headers  = [
+            'KyuWeb' => '0.1',
+            'Content-Type' => $this->isKwReq ? 'text/markdown' : 'text/html'
+        ];
+        $response = new Response('php://memory', $httpErrCode, $headers);
+
         $statusMsg = $response->getReasonPhrase();
         if ($this->isKwReq) {
             $content =  <<<END
@@ -132,7 +136,6 @@ END;
 END;
         }
 
-        $response = $response->withHeader('KyuWeb', '0.1');
         $response->getBody()->write($content);
 
         return $response;
